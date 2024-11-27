@@ -1,9 +1,9 @@
 package util.collections
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import util.Direction
-import kotlin.test.assertTrue
 
 class MatrixTest {
     @Test
@@ -59,7 +59,7 @@ class MatrixTest {
 
         assertEquals(listOf(20, 21, 22, 23), Matrix(data).row(1))
     }
-    
+
     @Test
     fun `Should get proper column`() {
         val data = listOf(
