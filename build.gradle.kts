@@ -74,12 +74,13 @@ tasks {
             includeTestsMatching("day$day.*")
         }
         testLogging {
-            info.events = mutableSetOf(
-                TestLogEvent.PASSED,
-                TestLogEvent.FAILED,
-                TestLogEvent.STANDARD_OUT,
-                TestLogEvent.STANDARD_ERROR
-            )
+            info.events =
+                mutableSetOf(
+                    TestLogEvent.PASSED,
+                    TestLogEvent.FAILED,
+                    TestLogEvent.STANDARD_OUT,
+                    TestLogEvent.STANDARD_ERROR,
+                )
             events = info.events
         }
     }
@@ -91,12 +92,13 @@ tasks {
         systemProperty("java.library.path", "$buildDir/nativeLibs${File.pathSeparatorChar}$javaLibraryPath")
 
         useJUnitPlatform()
-        testLogging.events = mutableSetOf(
-            TestLogEvent.PASSED,
-            TestLogEvent.FAILED,
-            TestLogEvent.STANDARD_OUT,
-            TestLogEvent.STANDARD_ERROR
-        )
+        testLogging.events =
+            mutableSetOf(
+                TestLogEvent.PASSED,
+                TestLogEvent.FAILED,
+                TestLogEvent.STANDARD_OUT,
+                TestLogEvent.STANDARD_ERROR,
+            )
         filter {
             // Don't run tests on the "template" classes
             excludeTestsMatching("dayNN.*")

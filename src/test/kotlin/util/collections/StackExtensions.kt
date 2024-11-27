@@ -2,7 +2,7 @@
 
 package util.collections
 
-import java.util.*
+import java.util.Stack
 
 /**
  * Pop N items from the stack. Note that the items returned will be in the same order that they were in the stack. This is meant

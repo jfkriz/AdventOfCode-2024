@@ -5,7 +5,8 @@ package util.collections
 import util.DataPoint
 import util.Direction
 import util.extensions.toward
-import java.util.*
+import java.util.LinkedList
+import java.util.Queue
 
 @Suppress("MemberVisibilityCanBePrivate")
 open class Matrix<T>(initialContents: List<List<T>>) : Iterable<List<T>> {
@@ -14,7 +15,11 @@ open class Matrix<T>(initialContents: List<List<T>>) : Iterable<List<T>> {
 
     constructor(width: Int, height: Int, fill: T) : this(List(height) { List(width) { fill } })
 
-    fun drawLine(start: Pair<Int, Int>, end: Pair<Int, Int>, fill: T) {
+    fun drawLine(
+        start: Pair<Int, Int>,
+        end: Pair<Int, Int>,
+        fill: T,
+    ) {
         if (start.first == end.first) {
             // Vertical line
             for (row in start.second toward end.second) {
@@ -41,7 +46,7 @@ open class Matrix<T>(initialContents: List<List<T>>) : Iterable<List<T>> {
         row: Int,
         col: Int,
         includeDiagonal: Boolean = false,
-        pointFilter: (currentPoint: DataPoint<T>, neighboringPoint: DataPoint<T>) -> Boolean = { _, _ -> true }
+        pointFilter: (currentPoint: DataPoint<T>, neighboringPoint: DataPoint<T>) -> Boolean = { _, _ -> true },
     ): Map<Direction, DataPoint<T>> =
         Direction.entries.filter { includeDiagonal || !it.diagonal }.filter {
             (row + it.yOffset < height) && (row + it.yOffset >= 0) &&
@@ -64,7 +69,7 @@ open class Matrix<T>(initialContents: List<List<T>>) : Iterable<List<T>> {
     fun findAllPaths(
         end: DataPoint<T>,
         allowDiagonal: Boolean = false,
-        pointFilter: (currentPoint: DataPoint<T>, neighboringPoint: DataPoint<T>) -> Boolean = { _, _ -> true }
+        pointFilter: (currentPoint: DataPoint<T>, neighboringPoint: DataPoint<T>) -> Boolean = { _, _ -> true },
     ): Map<DataPoint<T>, List<DataPoint<T>>> {
         val queue = LinkedList(listOf(end to Path(end))) as Queue<Pair<DataPoint<T>, Path<T>>>
 
@@ -76,12 +81,13 @@ open class Matrix<T>(initialContents: List<List<T>>) : Iterable<List<T>> {
                 getNeighboringPoints(point.y, point.x, allowDiagonal) { current, neighbor ->
                     pointFilter(current, neighbor) && !pointDistances.containsKey(neighbor)
                 }.map {
-                    val newPath = path.clone().apply {
-                        add(it.value.copy())
-                    }
+                    val newPath =
+                        path.clone().apply {
+                            add(it.value.copy())
+                        }
                     pointDistances[it.value] = newPath
                     it.value to newPath
-                }
+                },
             )
         }
 
@@ -100,17 +106,15 @@ open class Matrix<T>(initialContents: List<List<T>>) : Iterable<List<T>> {
         start: DataPoint<T>,
         end: DataPoint<T>,
         allowDiagonal: Boolean = false,
-        pointFilter: (currentPoint: DataPoint<T>, neighboringPoint: DataPoint<T>) -> Boolean = { _, _ -> true }
-    ) =
-        findAllPaths(end, allowDiagonal, pointFilter).filter { it.key == start }.ifEmpty { emptyMap() }.values.first()
+        pointFilter: (currentPoint: DataPoint<T>, neighboringPoint: DataPoint<T>) -> Boolean = { _, _ -> true },
+    ) = findAllPaths(end, allowDiagonal, pointFilter).filter { it.key == start }.ifEmpty { emptyMap() }.values.first()
 
     fun findLongestPath(
         start: DataPoint<T>,
         end: DataPoint<T>,
         allowDiagonal: Boolean = false,
-        pointFilter: (currentPoint: DataPoint<T>, neighboringPoint: DataPoint<T>) -> Boolean = { _, _ -> true }
-    ) =
-        findAllPaths(end, allowDiagonal, pointFilter).filter { it.key == start }.ifEmpty { emptyMap() }.values.last()
+        pointFilter: (currentPoint: DataPoint<T>, neighboringPoint: DataPoint<T>) -> Boolean = { _, _ -> true },
+    ) = findAllPaths(end, allowDiagonal, pointFilter).filter { it.key == start }.ifEmpty { emptyMap() }.values.last()
 
     /**
      * Turn this matrix on it's side, and return the new representation. By transposing, the first row becomes the first column,
@@ -134,9 +138,10 @@ open class Matrix<T>(initialContents: List<List<T>>) : Iterable<List<T>> {
         val rows = grid.size
         val cols = grid[0].size
 
-        val transposed = Array<Array<Any>>(cols) {
-            Array(rows) { }
-        }
+        val transposed =
+            Array<Array<Any>>(cols) {
+                Array(rows) { }
+            }
 
         for (i in 0 until rows) {
             for (j in 0 until cols) {
@@ -144,14 +149,21 @@ open class Matrix<T>(initialContents: List<List<T>>) : Iterable<List<T>> {
             }
         }
 
-        grid = transposed.map {
-            @Suppress("UNCHECKED_CAST")
-            it.toMutableList() as MutableList<T>
-        }.toMutableList()
+        grid =
+            transposed.map {
+                @Suppress("UNCHECKED_CAST")
+                it.toMutableList() as MutableList<T>
+            }.toMutableList()
         return this
     }
 
-    fun expand(left: Int = 0, right: Int = 0, up: Int = 0, down: Int = 0, fill: T): Matrix<T> {
+    fun expand(
+        left: Int = 0,
+        right: Int = 0,
+        up: Int = 0,
+        down: Int = 0,
+        fill: T,
+    ): Matrix<T> {
         var newMatrix = Matrix(grid)
         if (down > 0) {
             newMatrix = Matrix(newMatrix.grid + List(down) { List(newMatrix.width) { fill } })
@@ -192,7 +204,10 @@ open class Matrix<T>(initialContents: List<List<T>>) : Iterable<List<T>> {
             it[colNum]
         }
 
-    fun pointAt(row: Int, col: Int): DataPoint<T> = DataPoint(col, row, grid[row][col])
+    fun pointAt(
+        row: Int,
+        col: Int,
+    ): DataPoint<T> = DataPoint(col, row, grid[row][col])
 
     fun find(pointFilter: (currentPoint: T) -> Boolean): List<DataPoint<T>> {
         return grid.mapIndexed { y, row ->
@@ -212,21 +227,28 @@ open class Matrix<T>(initialContents: List<List<T>>) : Iterable<List<T>> {
         }.flatten().toSet()
     }
 
-    fun setPoint(row: Int, col: Int, value: T) = if (isValidPoint(row, col)) {
+    fun setPoint(
+        row: Int,
+        col: Int,
+        value: T,
+    ) = if (isValidPoint(row, col)) {
         grid[row][col] = value
         true
     } else {
         false
     }
 
-    fun isValidPoint(row: Int, col: Int) = (row in 0 until height) && (col in 0..width)
+    fun isValidPoint(
+        row: Int,
+        col: Int,
+    ) = (row in 0 until height) && (col in 0..width)
 
     fun pointsWithinDistance(
         row: Int,
         col: Int,
         distance: Int,
         includeOffGrid: Boolean = false,
-        fill: T? = null
+        fill: T? = null,
     ): List<DataPoint<T>> {
         if (includeOffGrid) {
             requireNotNull(fill) {
@@ -238,13 +260,14 @@ open class Matrix<T>(initialContents: List<List<T>>) : Iterable<List<T>> {
 
         return (col - distance - 1 toward col + distance).map { y ->
             (row - distance - 1 toward row + distance).mapNotNull { x ->
-                val next = if (isValidPoint(y, x)) {
-                    pointAt(y, x)
-                } else if (includeOffGrid) {
-                    DataPoint<T>(x, y, fill!!)
-                } else {
-                    null
-                }
+                val next =
+                    if (isValidPoint(y, x)) {
+                        pointAt(y, x)
+                    } else if (includeOffGrid) {
+                        DataPoint<T>(x, y, fill!!)
+                    } else {
+                        null
+                    }
 
                 if (next != null && start.distanceFrom(next) <= distance && next != start) {
                     next
@@ -278,9 +301,10 @@ internal data class Path<T>(val start: DataPoint<T>) : Cloneable {
 
     fun add(point: DataPoint<T>) = _points.add(point)
 
-    public override fun clone() = Path(this.start).apply {
-        this@Path.points.map { it.copy() }.forEach {
-            add(it)
+    public override fun clone() =
+        Path(this.start).apply {
+            this@Path.points.map { it.copy() }.forEach {
+                add(it)
+            }
         }
-    }
 }

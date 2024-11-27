@@ -11,23 +11,17 @@ package util.collections
  * increment, step by 1, etc.
  */
 class FastLongRange(val start: Long, val length: Long) {
-    fun contains(n: Long): Boolean =
-        n >= start && n <= start + length - 1
+    fun contains(n: Long): Boolean = n >= start && n <= start + length - 1
 
-    fun indexOf(n: Long): Long =
-        n - start - 1
+    fun indexOf(n: Long): Long = n - start - 1
 
-    fun elementAt(n: Long): Long =
-        start + n + 1
+    fun elementAt(n: Long): Long = start + n + 1
 }
 
 class FastIntRange(val start: Int, val length: Int) {
-    fun contains(n: Int): Boolean =
-        n >= start && n <= start + length - 1
+    fun contains(n: Int): Boolean = n >= start && n <= start + length - 1
 
-    fun indexOf(n: Int): Int =
-        n - start - 1
+    fun indexOf(n: Int): Int = n - start - 1
 
-    fun elementAt(n: Int): Int =
-        start + n + 1
+    fun elementAt(n: Int): Int = start + n + 1
 }

@@ -15,6 +15,7 @@ open class Point(var x: Int, var y: Int) {
     }
 
     operator fun plus(other: Point) = Point(x + other.x, y + other.y)
+
     operator fun minus(other: Point) = Point(x - other.x, y - other.y)
 
     fun move(direction: Direction): Point =
@@ -23,7 +24,10 @@ open class Point(var x: Int, var y: Int) {
             y += direction.yOffset
         }
 
-    fun move(xCount: Int, yCount: Int): Point =
+    fun move(
+        xCount: Int,
+        yCount: Int,
+    ): Point =
         this.apply {
             x += xCount
             y += yCount
@@ -31,18 +35,20 @@ open class Point(var x: Int, var y: Int) {
 
     fun isSameLocation(other: Point) = this.x == other.x && this.y == other.y
 
-    fun isNeighboringLocation(other: Point, includeDiagonal: Boolean = true) =
-        Direction.entries.filter {
-            if (includeDiagonal) {
-                true
-            } else {
-                !it.diagonal
-            }
-        }.map {
-            (x + it.xOffset) to (y + it.yOffset)
-        }.any {
-            it.first == other.x && it.second == other.y
+    fun isNeighboringLocation(
+        other: Point,
+        includeDiagonal: Boolean = true,
+    ) = Direction.entries.filter {
+        if (includeDiagonal) {
+            true
+        } else {
+            !it.diagonal
         }
+    }.map {
+        (x + it.xOffset) to (y + it.yOffset)
+    }.any {
+        it.first == other.x && it.second == other.y
+    }
 
     fun differenceWith(other: Point) = (this.x - other.x) to (this.y - other.y)
 
@@ -80,7 +86,10 @@ open class Point(var x: Int, var y: Int) {
 }
 
 open class DataPoint<T>(x: Int, y: Int, var value: T) : Point(x, y) {
-    fun lineTo(other: DataPoint<*>, fill: T) = lineTo(other).map { DataPoint(it.x, it.y, fill) }
+    fun lineTo(
+        other: DataPoint<*>,
+        fill: T,
+    ) = lineTo(other).map { DataPoint(it.x, it.y, fill) }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -111,5 +120,5 @@ enum class Direction(val xOffset: Int, val yOffset: Int, val diagonal: Boolean =
     UpLeft(-1, -1, true),
     DownLeft(-1, 1, true),
     UpRight(1, -1, true),
-    DownRight(1, 1, true)
+    DownRight(1, 1, true),
 }
