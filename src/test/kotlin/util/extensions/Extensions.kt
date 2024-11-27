@@ -4,8 +4,7 @@ package util.extensions
 
 import util.Point
 
-fun IntRange.encloses(other: IntRange) =
-    this.contains(other.first) && this.contains(other.last)
+fun IntRange.encloses(other: IntRange) = this.contains(other.first) && this.contains(other.last)
 
 fun IntRange.overlaps(other: IntRange) =
     (this.contains(other.first) || this.contains(other.last)) ||
@@ -33,11 +32,12 @@ fun List<String>.chunked(delimiter: String = ""): List<List<String>> =
  * split an input line on a certain delimiter or at a certain chunk size, and then turn that into a [util.collections.Matrix],
  * since the Matrix requires all input lines to be equal length.
  */
-fun List<String>.padToMaxLength(padChar: Char): List<String> = with(this.maxOf { it.length }) {
-    map {
-        it.padEnd(this, padChar)
+fun List<String>.padToMaxLength(padChar: Char): List<String> =
+    with(this.maxOf { it.length }) {
+        map {
+            it.padEnd(this, padChar)
+        }
     }
-}
 
 /**
  * A convenience so that you can make a range without having to worry about positive or negative
@@ -76,17 +76,20 @@ fun List<IntRange>.reduce(): List<IntRange> =
  * [Day 1 of the 2023 Advent of Code](https://adventofcode.com/2023/day/1), so we could easily find the last
  * occurrence of a number word (like "one") in a string, and replace it with the numeric value ("1").
  */
-fun String.replaceLast(oldValue: String, newValue: String): String =
-    this.reversed().replaceFirst(oldValue.reversed(), newValue.reversed()).reversed()
+fun String.replaceLast(
+    oldValue: String,
+    newValue: String,
+): String = this.reversed().replaceFirst(oldValue.reversed(), newValue.reversed()).reversed()
 
 /**
  * Compute the lowest common multiple for a list of numbers. This is the smallest number that is evenly
  * divisible by every number in the list.
  */
-fun List<Long>.lcm(): Long = assertValue(
-    this,
-    this.size >= 2
-) { "You must provide at least two numbers to compute lcm" }.reduce { acc, l -> acc.lcm(l) }
+fun List<Long>.lcm(): Long =
+    assertValue(
+        this,
+        this.size >= 2,
+    ) { "You must provide at least two numbers to compute lcm" }.reduce { acc, l -> acc.lcm(l) }
 
 /**
  * Compute the lowest common multiple for this number and another. This is the smallest number that is evenly
@@ -109,17 +112,22 @@ fun Long.gcd(other: Long): Long =
  * Compute the greatest common denominator for a list of numbers. This is the largest number that
  * divides evenly with zero remainder into all numbers in the list.
  */
-fun List<Long>.gcd(): Long = assertValue(
-    this,
-    this.size >= 2
-) { "You must provide at least two numbers to compute gcd" }.reduce { acc, l -> acc.gcd(l) }
+fun List<Long>.gcd(): Long =
+    assertValue(
+        this,
+        this.size >= 2,
+    ) { "You must provide at least two numbers to compute gcd" }.reduce { acc, l -> acc.gcd(l) }
 
 /**
  * A convenience method to assert that a given [value] passes the specified boolean [test]. This will
  * return the [value] if it passes the test, or will throw an exception with the given [lazyMessage]
  * if it fails.
  */
-fun <T> assertValue(value: T, test: Boolean, lazyMessage: () -> Any): T {
+fun <T> assertValue(
+    value: T,
+    test: Boolean,
+    lazyMessage: () -> Any,
+): T {
     assert(test) { lazyMessage }
     return value
 }
@@ -146,16 +154,21 @@ fun <T> Sequence<T>.combinations(size: Int): Sequence<List<T>> =
  * Repeat a string a number of [times], with a [separator] between each repeated string.
  * For example, "foo".repeat(3, "bar-") will return "foobar-foobar-foobar"
  */
-fun String.repeatWithSeparator(times: Int, separator: String): String =
-    (1..times).joinToString(separator) { this }
+fun String.repeatWithSeparator(
+    times: Int,
+    separator: String,
+): String = (1..times).joinToString(separator) { this }
 
 /**
  * Create a String by repeating any Iterable a number of [times], with an [iterableSeparator] between each item in the
  * iterable, and a [separator] between each copy of the iterable.
  * For example, listOf("foo", "bar", "baz").repeat(3, "-", ":") will return "foo-bar-baz:foo-bar-baz:foo-bar-baz"
  */
-fun <T> Iterable<T>.repeatWithSeparator(times: Int, iterableSeparator: String = ",", separator: String = ","): String =
-    (1..times).joinToString(separator) { this.joinToString(iterableSeparator) }
+fun <T> Iterable<T>.repeatWithSeparator(
+    times: Int,
+    iterableSeparator: String = ",",
+    separator: String = ",",
+): String = (1..times).joinToString(separator) { this.joinToString(iterableSeparator) }
 
 /**
  * Rotate a 2D grid clockwise, 90 degrees to the right.

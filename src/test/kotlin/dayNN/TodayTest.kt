@@ -43,7 +43,9 @@ class TodayTest : DataFiles {
     }
 }
 
-class Solver(@Suppress("UNUSED_PARAMETER") data: List<String>) {
+class Solver(
+    @Suppress("UNUSED_PARAMETER") data: List<String>,
+) {
     fun solvePartOne(): Int {
         return 42
     }
