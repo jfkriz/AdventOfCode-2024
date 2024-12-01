@@ -32,7 +32,7 @@ if [ -d $day_dir ]; then
   exit 1
 fi
 
-aoc_day=$(echo $day | sed -e 's/^0+//')
+aoc_day=$(echo $day | sed -e 's/^0//')
 aoc_year=$(date +'%Y')
 aoc_day_base_url=https://adventofcode.com/$aoc_year/day/$aoc_day
 
