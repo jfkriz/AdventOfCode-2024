@@ -11,7 +11,7 @@ import kotlin.math.abs
 
 @DisplayName("Day 01 - Historian Hysteria")
 @TestMethodOrder(OrderAnnotation::class)
-class TodayTest : DataFiles {
+class HistorianHysteriaTest : DataFiles {
     private val sampleSolver by lazy {
         Solver(loadSampleInput())
     }
