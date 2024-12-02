@@ -23,7 +23,7 @@ repositories {
 }
 
 dependencies {
-    val junitVersion = "5.10.1"
+    val junitVersion = "5.11.3"
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     // 2023 Day 24. I cheated here...
     testImplementation("com.microsoft.z3:java-jar:4.8.8.1")
