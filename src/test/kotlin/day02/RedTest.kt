@@ -48,6 +48,7 @@ class Solver(
     data: List<String>,
 ) {
     private val reports: List<Report> = data.map { Report(it) }
+
     fun solvePartOne(): Int {
         return reports.map(Report::isSafe).count { it }
     }
@@ -79,10 +80,11 @@ data class Report(private val levels: List<Int>) {
      * This solution is not very elegant, but surprisingly, the brute force approach is fast enough.
      */
     fun isSafeWithDampening(): Boolean {
-        return isSafe() || levels.indices.any { index ->
-            val dampened = levels.toMutableList()
-            dampened.removeAt(index)
-            Report(dampened).isSafe()
-        }
+        return isSafe() ||
+            levels.indices.any { index ->
+                val dampened = levels.toMutableList()
+                dampened.removeAt(index)
+                Report(dampened).isSafe()
+            }
     }
 }
