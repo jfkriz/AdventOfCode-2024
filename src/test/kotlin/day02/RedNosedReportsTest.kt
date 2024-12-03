@@ -9,9 +9,9 @@ import org.junit.jupiter.api.TestMethodOrder
 import util.DataFiles
 import kotlin.math.abs
 
-@DisplayName("Day 02 - Red")
+@DisplayName("Day 02 - Red-Nosed Reports")
 @TestMethodOrder(OrderAnnotation::class)
-class RedTest : DataFiles {
+class RedNosedReportsTest : DataFiles {
     private val sampleSolver by lazy {
         Solver(loadSampleInput())
     }
