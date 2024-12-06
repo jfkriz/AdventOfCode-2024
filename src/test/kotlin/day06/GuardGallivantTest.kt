@@ -58,7 +58,7 @@ class Solver(
     private val startingPosition =
         mapGrid.flatMapIndexed { y, row ->
             row.mapIndexedNotNull { x, cell ->
-                if (GuardDirection.fromIcon(cell)!=null) Point(x, y) else null
+                if (GuardDirection.fromIcon(cell) != null) Point(x, y) else null
             }
         }.first()
 
@@ -77,7 +77,7 @@ class Solver(
             }
 
             // If we're hitting an object, then we need to turn right.
-            if (mapGrid[nextPosition.y][nextPosition.x]=='#') {
+            if (mapGrid[nextPosition.y][nextPosition.x] == '#') {
                 direction = direction.turnRight()
                 continue
             }
@@ -98,7 +98,7 @@ class Solver(
         for (y in rows) {
             for (x in columns) {
                 val point = Point(x, y)
-                if (point==startingPosition || mapGrid[y][x]=='#') continue
+                if (point == startingPosition || mapGrid[y][x] == '#') continue
 
                 if (causesLoopWithObstruction(point)) {
                     possibleObstructionPositions.add(point)
@@ -124,7 +124,7 @@ class Solver(
             }
 
             // If we're hitting an object or the new obstruction, then we need to turn right.
-            if (mapGrid[nextPosition.y][nextPosition.x]=='#' || nextPosition==obstruction) {
+            if (mapGrid[nextPosition.y][nextPosition.x] == '#' || nextPosition == obstruction) {
                 direction = direction.turnRight()
                 continue
             }
@@ -148,7 +148,7 @@ enum class GuardDirection(val icon: Char, val heading: Direction) {
     ;
 
     companion object {
-        fun fromIcon(icon: Char) = entries.firstOrNull { it.icon==icon }
+        fun fromIcon(icon: Char) = entries.firstOrNull { it.icon == icon }
     }
 
     fun turnRight() =
