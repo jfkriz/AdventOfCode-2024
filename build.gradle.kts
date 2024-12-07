@@ -49,7 +49,11 @@ tasks {
     }
 
     register<Copy>("extractZ3NativeLib") {
-        val zipFile = configurations.testRuntimeClasspath.get().files.first { it.name.contains("libz3\\.java\\.linux-.*\\.zip".toRegex()) }
+        val zipFile =
+            configurations.testRuntimeClasspath
+                .get()
+                .files
+                .first { it.name.contains("libz3\\.java\\.linux-.*\\.zip".toRegex()) }
         val nativeLibsDir = file("$buildDir/nativeLibs")
 
         from(zipTree(zipFile))
