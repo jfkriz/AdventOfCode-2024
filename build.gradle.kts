@@ -26,8 +26,8 @@ dependencies {
     val junitVersion = "5.11.3"
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     // 2023 Day 24. I cheated here...
-    testImplementation("com.microsoft.z3:java-jar:4.8.8.1")
-    testRuntimeOnly("com.microsoft.z3:libz3.java.linux:4.8.8")
+    testImplementation("com.microsoft.z3:java-jar:4.11.2")
+    testRuntimeOnly("com.microsoft.z3:libz3.java.linux:4.11.2@zip")
 
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     implementation(kotlin("stdlib-jdk8"))
