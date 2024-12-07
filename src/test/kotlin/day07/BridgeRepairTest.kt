@@ -50,16 +50,15 @@ class Solver(
 ) {
     private val calibrations = data.map { Calibration(it) }
 
-    fun solvePartOne(): Long {
-        return calibrations.filter { it.canNumbersComputeToTestValue(it) }.sumOf { it.testValue }
-    }
+    fun solvePartOne(): Long = calibrations.filter { it.canNumbersComputeToTestValue(it) }.sumOf { it.testValue }
 
-    fun solvePartTwo(): Long {
-        return calibrations.filter { it.canNumbersComputeToTestValue(it, true) }.sumOf { it.testValue }
-    }
+    fun solvePartTwo(): Long = calibrations.filter { it.canNumbersComputeToTestValue(it, true) }.sumOf { it.testValue }
 }
 
-data class Calibration(val testValue: Long, val numbers: List<Int>) {
+data class Calibration(
+    val testValue: Long,
+    val numbers: List<Int>,
+) {
     constructor(line: String) : this(
         line.split(":")[0].toLong(),
         line.split(":")[1].split(" ").mapNotNull { it.trim().toIntOrNull() },
