@@ -1,7 +1,6 @@
 package day07
 
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation
 import org.junit.jupiter.api.Order
@@ -40,7 +39,6 @@ class BridgeRepairTest : DataFiles {
 
     @Test
     @Order(4)
-    @Disabled("This test takes about 5 seconds to run, so skipping it.")
     fun `Part 2 Real Input should return 91377448644679`() {
         assertEquals(91377448644679, solver.solvePartTwo())
     }

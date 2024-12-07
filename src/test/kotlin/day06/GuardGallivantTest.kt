@@ -1,7 +1,6 @@
 package day06
 
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation
 import org.junit.jupiter.api.Order
@@ -41,7 +40,6 @@ class GuardGallivantTest : DataFiles {
 
     @Test
     @Order(4)
-    @Disabled("This test takes about 6 seconds to run, so skipping it.")
     fun `Part 2 Real Input should return 1480`() {
         assertEquals(1480, solver.solvePartTwo())
     }
@@ -56,11 +54,12 @@ class Solver(
 
     // Locate the starting position on the grid
     private val startingPosition =
-        mapGrid.flatMapIndexed { y, row ->
-            row.mapIndexedNotNull { x, cell ->
-                if (GuardDirection.fromIcon(cell) != null) Point(x, y) else null
-            }
-        }.first()
+        mapGrid
+            .flatMapIndexed { y, row ->
+                row.mapIndexedNotNull { x, cell ->
+                    if (GuardDirection.fromIcon(cell) != null) Point(x, y) else null
+                }
+            }.first()
 
     fun solvePartOne(): Int {
         var current = startingPosition
@@ -140,7 +139,10 @@ class Solver(
     }
 }
 
-enum class GuardDirection(val icon: Char, val heading: Direction) {
+enum class GuardDirection(
+    val icon: Char,
+    val heading: Direction,
+) {
     UP('^', Direction.Up),
     DOWN('v', Direction.Down),
     LEFT('<', Direction.Left),
