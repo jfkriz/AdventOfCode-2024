@@ -18,20 +18,12 @@ open class Point(var x: Int, var y: Int) {
 
     operator fun minus(other: Point) = Point(x - other.x, y - other.y)
 
-    fun move(direction: Direction): Point =
-        this.apply {
-            x += direction.xOffset
-            y += direction.yOffset
-        }
+    fun move(direction: Direction): Point = Point(x + direction.xOffset, y + direction.yOffset)
 
     fun move(
         xCount: Int,
         yCount: Int,
-    ): Point =
-        this.apply {
-            x += xCount
-            y += yCount
-        }
+    ): Point = Point(x + xCount, y + yCount)
 
     fun isSameLocation(other: Point) = this.x == other.x && this.y == other.y
 
