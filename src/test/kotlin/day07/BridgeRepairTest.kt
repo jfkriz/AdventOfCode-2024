@@ -84,7 +84,7 @@ data class Calibration(val testValue: Long, val numbers: List<Int>) {
                     else -> throw IllegalArgumentException("Invalid operator")
                 }
         }
-        result==calibration.testValue
+        result == calibration.testValue
     }
 
     private fun generateOperatorCombinations(
@@ -97,7 +97,7 @@ data class Calibration(val testValue: Long, val numbers: List<Int>) {
             current: String,
             position: Int,
         ) {
-            if (position==n) {
+            if (position == n) {
                 result.add(current)
                 return
             }
