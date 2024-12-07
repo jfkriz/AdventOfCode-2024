@@ -142,13 +142,31 @@ fun <T> Sequence<T>.combinations(size: Int): Sequence<List<T>> =
             for ((i, element) in withIndex()) {
                 val remaining = drop(i + 1)
                 for (combination in remaining.combinations(size - 1)) {
-                    yield(listOf(element) + combination)
+                    yield(combination + listOf(element))
                 }
             }
         } else {
             yield(emptyList())
         }
     }
+
+/**
+ * Determine the number of distinct permutations of [size] are possible given all the elements in the given sequence.
+ * This was initially implemented for [Day 7 of the 2024 Advent of Code](https://adventofcode.com/2024/day/7).
+ */
+fun <T> Sequence<T>.permutations(size: Int): Sequence<List<T>> {
+    require(size >= 0) { "Size must be non-negative" }
+
+    if (size == 0) return sequenceOf(emptyList())
+
+    return sequence {
+        for (item in this@permutations) {
+            for (perm in this@permutations.permutations(size - 1)) {
+                yield(listOf(item) + perm)
+            }
+        }
+    }
+}
 
 /**
  * Repeat a string a number of [times], with a [separator] between each repeated string.
