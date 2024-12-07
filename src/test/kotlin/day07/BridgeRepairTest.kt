@@ -1,13 +1,13 @@
 package day07
 
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestMethodOrder
 import util.DataFiles
+import util.extensions.permutations
 
 @DisplayName("Day 07 - Bridge Repair")
 @TestMethodOrder(OrderAnnotation::class)
@@ -39,7 +39,6 @@ class BridgeRepairTest : DataFiles {
 
     @Test
     @Order(4)
-    @Disabled("This test takes about 5 seconds to run, so skipping it.")
     fun `Part 2 Real Input should return 91377448644679`() {
         assertEquals(91377448644679, solver.solvePartTwo())
     }
@@ -72,7 +71,7 @@ data class Calibration(
     fun canNumbersComputeToTestValue(
         calibration: Calibration,
         includeConcatenation: Boolean = false,
-    ) = generateOperatorCombinations(calibration.numbers.size - 1, includeConcatenation).any { op ->
+    ) = (if (includeConcatenation) "*+|" else "*+").asSequence().permutations(calibration.numbers.size - 1).any { op ->
         var result = calibration.numbers[0].toLong()
         for (i in 1 until calibration.numbers.size) {
             result =
@@ -84,33 +83,5 @@ data class Calibration(
                 }
         }
         result == calibration.testValue
-    }
-
-    private fun generateOperatorCombinations(
-        n: Int,
-        includeConcatenation: Boolean,
-    ): List<List<Char>> {
-        val result = mutableListOf<String>()
-
-        fun generateCombinations(
-            current: String,
-            position: Int,
-        ) {
-            if (position == n) {
-                result.add(current)
-                return
-            }
-            // Add '+' to the current combination
-            generateCombinations("$current+", position + 1)
-            // Add '*' to the current combination
-            generateCombinations("$current*", position + 1)
-            // If concatenation is allowed, add it to the current combination
-            if (includeConcatenation) {
-                generateCombinations("$current|", position + 1)
-            }
-        }
-
-        generateCombinations("", 0)
-        return result.map { it.toList() }
     }
 }
