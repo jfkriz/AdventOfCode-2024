@@ -6,7 +6,10 @@ import kotlin.math.abs
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 
-open class Point(var x: Int, var y: Int) {
+open class Point(
+    var x: Int,
+    var y: Int,
+) {
     companion object {
         val UP = Point(0, -1)
         val DOWN = Point(0, 1)
@@ -17,6 +20,8 @@ open class Point(var x: Int, var y: Int) {
     operator fun plus(other: Point) = Point(x + other.x, y + other.y)
 
     operator fun minus(other: Point) = Point(x - other.x, y - other.y)
+
+    operator fun times(scalar: Int) = Point(x * scalar, y * scalar)
 
     fun move(direction: Direction): Point = Point(x + direction.xOffset, y + direction.yOffset)
 
@@ -30,17 +35,18 @@ open class Point(var x: Int, var y: Int) {
     fun isNeighboringLocation(
         other: Point,
         includeDiagonal: Boolean = true,
-    ) = Direction.entries.filter {
-        if (includeDiagonal) {
-            true
-        } else {
-            !it.diagonal
+    ) = Direction.entries
+        .filter {
+            if (includeDiagonal) {
+                true
+            } else {
+                !it.diagonal
+            }
+        }.map {
+            (x + it.xOffset) to (y + it.yOffset)
+        }.any {
+            it.first == other.x && it.second == other.y
         }
-    }.map {
-        (x + it.xOffset) to (y + it.yOffset)
-    }.any {
-        it.first == other.x && it.second == other.y
-    }
 
     fun differenceWith(other: Point) = (this.x - other.x) to (this.y - other.y)
 
@@ -77,7 +83,11 @@ open class Point(var x: Int, var y: Int) {
     open fun copy(): Point = Point(x, y)
 }
 
-open class DataPoint<T>(x: Int, y: Int, var value: T) : Point(x, y) {
+open class DataPoint<T>(
+    x: Int,
+    y: Int,
+    var value: T,
+) : Point(x, y) {
     fun lineTo(
         other: DataPoint<*>,
         fill: T,
@@ -104,7 +114,11 @@ open class DataPoint<T>(x: Int, y: Int, var value: T) : Point(x, y) {
     override fun copy(): DataPoint<T> = DataPoint(x, y, value)
 }
 
-enum class Direction(val xOffset: Int, val yOffset: Int, val diagonal: Boolean = false) {
+enum class Direction(
+    val xOffset: Int,
+    val yOffset: Int,
+    val diagonal: Boolean = false,
+) {
     Up(0, -1),
     Down(0, 1),
     Left(-1, 0),

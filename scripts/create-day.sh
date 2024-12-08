@@ -16,7 +16,7 @@ fi
 
 default_day=$(date +'%d')
 day=${1:-${default_day}}
-day=$(printf "%02d" $day)
+#day=$(printf "%02d" $day)
 
 if [ $day -lt 1 ] || [ $day -gt 25 ] || [ $day -gt $default_day ]; then
   echo "You can only run this for days 1-25 in December, and you can't request a date in the future."
