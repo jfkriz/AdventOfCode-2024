@@ -79,20 +79,20 @@ class Solver(
         val visited = mutableSetOf<Point>()
         val peaks = mutableSetOf<Point>()
         val queue = mutableListOf(trailhead)
-        var score = 0
+        var rating = 0
         while (queue.isNotEmpty()) {
             val current = queue.removeFirst()
             visited.add(current)
             val currentVal = grid[current]
 
-            // If we have reached the end of the trail, we need to add the current value to the visited set and continue the loop.
+            // If we have reached the peak, we can stop this path on the trailhead.
             if (currentVal == 9) {
-                // For part 1, we only need to count the number of unique peaks we can reach, so calculateRating will be false.
-                // For part 2, we need to calculate the rating of the trailhead, which is the number of ways a trail can get to any
-                // given peak, so calculateRating will be true, and we will ignore whether we have reached that peak before.
-                if (peaks.add(current) || calculateRating) {
-                    score++
-                }
+                // For part 1, we need to calculate the score of the trailhead, which is the number of distinct peak values that can be reached.
+                peaks.add(current)
+
+                // For part 2, we need to calculate the rating of the trailhead, which is the number of ways a trail can get to any peak
+                rating++
+
                 continue
             }
 
@@ -108,7 +108,12 @@ class Solver(
                     .toList()
             queue.addAll(neighbors)
         }
-        return score
+
+        return if (calculateRating) {
+            rating
+        } else {
+            peaks.size
+        }
     }
 
     fun solvePartTwo(): Int = trailHeads.sumOf { calculateTrailheadScore(it, true) }
