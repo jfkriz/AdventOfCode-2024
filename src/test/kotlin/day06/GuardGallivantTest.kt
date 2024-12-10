@@ -88,9 +88,6 @@ class Solver(
         return pointsVisited.size
     }
 
-    /**
-     * Note: This solution is not optimized and takes about 6 seconds to run on my input.
-     */
     fun solvePartTwo(): Int {
         val possibleObstructionPositions = mutableSetOf<Point>()
 
@@ -111,8 +108,7 @@ class Solver(
     private fun causesLoopWithObstruction(obstruction: Point): Boolean {
         var current = startingPosition
         var direction = GuardDirection.fromIcon(mapGrid[current.y][current.x]) ?: error("Invalid starting direction")
-        val visited = mutableSetOf<Pair<Point, GuardDirection>>()
-        visited.add(current to direction)
+        val visitedObstructions = mutableSetOf<Pair<Point, GuardDirection>>()
 
         while (true) {
             val nextPosition = current.move(direction.heading)
@@ -124,13 +120,12 @@ class Solver(
 
             // If we're hitting an object or the new obstruction, then we need to turn right.
             if (mapGrid[nextPosition.y][nextPosition.x] == '#' || nextPosition == obstruction) {
+                // If we revisit an obstruction with the same direction, it means we're in a loop.
+                if (!visitedObstructions.add(current to direction)) {
+                    return true
+                }
                 direction = direction.turnRight()
                 continue
-            }
-
-            // If we revisit a position with the same direction, it means we're in a loop.
-            if (!visited.add(nextPosition to direction)) {
-                return true
             }
 
             // Take a step in the current direction.
