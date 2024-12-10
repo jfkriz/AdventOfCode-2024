@@ -99,11 +99,14 @@ class Solver(
             // Get all the neighbors of the current point that are valid and have not been visited.
             val neighbors =
                 current.neighbors
-                    .filter { !it.key.diagonal }
-                    .filter { it.value in grid }
-                    .filter { it.value !in visited }
-                    .filter { grid[it.value] == currentVal + 1 }
-            queue.addAll(neighbors.map { it.value })
+                    .asSequence()
+                    .filterNot { it.key.diagonal }
+                    .map { it.value }
+                    .filter { it in grid }
+                    .filterNot { it in visited }
+                    .filter { grid[it] == currentVal + 1 }
+                    .toList()
+            queue.addAll(neighbors)
         }
         return score
     }
