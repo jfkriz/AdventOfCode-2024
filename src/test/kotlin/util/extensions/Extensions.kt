@@ -230,6 +230,6 @@ inline fun <reified T> List<List<T>>.rotateRight(): List<List<T>> {
  */
 inline fun <reified T> List<List<T>>.rotateLeft(): List<List<T>> = this.rotateRight().map { it.reversed() }.reversed()
 
-fun List<List<*>>.containsPoint(point: Point): Boolean = point.x in this[0].indices && point.y in this.indices
+operator fun List<List<*>>.contains(point: Point): Boolean = point.x in this[0].indices && point.y in this.indices
 
 operator fun <T> List<List<T>>.get(point: Point): T = this[point.y][point.x]
