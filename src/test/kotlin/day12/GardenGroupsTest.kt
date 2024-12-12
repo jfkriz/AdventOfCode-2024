@@ -50,7 +50,7 @@ class GardenGroupsTest : DataFiles {
 class Solver(
     data: List<String>,
 ) {
-    val garden = GardenMap(data.map { it.toList() })
+    private val garden = GardenMap(data.map { it.toList() })
 
     fun solvePartOne(): Int = garden.totalCost
 
@@ -60,7 +60,7 @@ class Solver(
 data class GardenMap(
     val grid: List<List<Char>>,
 ) {
-    val regions: List<Region> by lazy {
+    private val regions: List<Region> by lazy {
         val regions = mutableListOf<List<Point>>()
         val visited = mutableSetOf<Point>()
         grid.forEachIndexed { y, row ->
@@ -98,8 +98,8 @@ data class GardenMap(
         visited.add(point)
         region.add(point)
 
-        Direction.entries.filterNot { it.diagonal }.forEach { direction ->
-            findRegion(point.move(direction), value, region, visited)
+        point.neighbors.filterNot { it.key.diagonal }.map { it.value }.forEach { neighbor ->
+            findRegion(neighbor, value, region, visited)
         }
     }
 }
