@@ -61,9 +61,6 @@ data class GardenMap(
     val grid: List<List<Char>>,
 ) {
     val regions: List<Region> by lazy {
-        // Regions in a grid are defined as contiguous groups of a character. Any group of a single character that touches
-        // horizontally or vertically is considered a region. The same character can be in multiple regions that are not touching.
-        // Also, regions can appear within other regions.
         val regions = mutableListOf<List<Point>>()
         val visited = mutableSetOf<Point>()
         grid.forEachIndexed { y, row ->
@@ -122,10 +119,6 @@ data class Region(
     private val area: Int = points.size
 
     private val perimeter: Int by lazy {
-        findPerimeterPoints().size
-    }
-
-    private fun findPerimeterPoints(): List<Point> {
         val perimeterPoints = mutableListOf<Point>()
         points.forEach { point ->
             Direction.entries.filterNot { it.diagonal }.forEach { direction ->
@@ -135,7 +128,7 @@ data class Region(
                 }
             }
         }
-        return perimeterPoints
+        perimeterPoints.size
     }
 
     private val sides: Int by lazy {
@@ -176,10 +169,11 @@ data class Region(
                     Triple(point.move(Direction.DownLeft), down, left),
                 )
 
-            innerCorners
-                .count { (corner, side1, side2) ->
-                    corner !in points && side1 in points && side2 in points
-                }.let { total += it }
+            total +=
+                innerCorners
+                    .count { (corner, side1, side2) ->
+                        corner !in points && side1 in points && side2 in points
+                    }
         }
         total
     }
