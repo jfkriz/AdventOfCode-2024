@@ -127,4 +127,16 @@ enum class Direction(
     DownLeft(-1, 1, true),
     UpRight(1, -1, true),
     DownRight(1, 1, true),
+    ;
+
+    companion object {
+        fun fromChar(char: Char): Direction =
+            when (char) {
+                in listOf('U', 'u', '^') -> Up
+                in listOf('D', 'd', 'V', 'v') -> Down
+                in listOf('L', 'l', '<') -> Left
+                in listOf('R', 'r', '>') -> Right
+                else -> throw IllegalArgumentException("Unknown Direction: $char")
+            }
+    }
 }
