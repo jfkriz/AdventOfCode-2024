@@ -233,3 +233,10 @@ inline fun <reified T> List<List<T>>.rotateLeft(): List<List<T>> = this.rotateRi
 operator fun List<List<*>>.contains(point: Point): Boolean = point.x in this[0].indices && point.y in this.indices
 
 operator fun <T> List<List<T>>.get(point: Point): T = this[point.y][point.x]
+
+operator fun <T> List<MutableList<T>>.set(
+    point: Point,
+    value: T,
+) {
+    this[point.y][point.x] = value
+}
