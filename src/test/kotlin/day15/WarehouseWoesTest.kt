@@ -10,7 +10,9 @@ import util.DataFiles
 import util.Direction
 import util.Point
 import util.extensions.chunked
+import util.extensions.contains
 import util.extensions.get
+import util.extensions.getOrDefault
 import util.extensions.set
 
 @DisplayName("Day 15 - Warehouse Woes")
@@ -112,8 +114,6 @@ data class WideWarehouse(
         }
     }
 
-    operator fun List<List<Icon>>.contains(point: Point): Boolean = point.x in this[0].indices && point.y in this.indices
-
     fun calculateBoxGpsCoordinates(): List<Int> {
         val boxCoordinates = mutableListOf<Int>()
         for (y in grid.indices) {
@@ -187,12 +187,12 @@ data class WideWarehouse(
 
     fun executeMoves(): WideWarehouse {
         val newGrid = grid.map { it.toMutableList() }
-        var robot = robot.copy()
+        var robot = robot
         for (move in moves) {
             val newPosition = robot.move(move)
 
             // If it is outside the grid, or we hit a wall, skip this move
-            if (newPosition !in newGrid || newGrid[newPosition] == Icon.WALL) {
+            if (newGrid.getOrDefault(newPosition, Icon.WALL) == Icon.WALL) {
                 continue
             }
 
@@ -212,7 +212,8 @@ data class WideWarehouse(
                     next = next.move(move)
                 }
                 // If the next position puts us off the grid or is not open, skip this move
-                if (next !in newGrid || newGrid[next] != Icon.OPEN) continue
+                if (newGrid.getOrDefault(next, Icon.WALL) != Icon.OPEN) continue
+
                 // I should be able to do some array slicing here to basically shift the
                 // entire chunk of boxen left or right, but I was not getting that to work,
                 // so this is a more brute force iterative approach. This will just move the
@@ -284,8 +285,6 @@ data class Warehouse(
         }
     }
 
-    operator fun List<List<Icon>>.contains(point: Point): Boolean = point.x in this[0].indices && point.y in this.indices
-
     fun calculateBoxGpsCoordinates(): List<Int> {
         val boxCoordinates = mutableListOf<Int>()
         for (y in grid.indices) {
@@ -300,12 +299,12 @@ data class Warehouse(
 
     fun executeMoves(): Warehouse {
         val newGrid = grid.map { it.toMutableList() }
-        var robot = robot.copy()
+        var robot = robot
         for (move in moves) {
             val newPosition = robot.move(move)
 
             // If it is outside the grid, or we hit a wall, skip this move
-            if (newPosition !in newGrid || newGrid[newPosition] == Icon.WALL) {
+            if (newGrid.getOrDefault(newPosition, Icon.WALL) == Icon.WALL) {
                 continue
             }
 
@@ -336,7 +335,7 @@ data class Warehouse(
         direction: Direction,
         grid: List<List<Icon>>,
     ): Boolean {
-        if (newPosition !in grid || grid[newPosition] == Icon.WALL) return false
+        if (grid.getOrDefault(newPosition, Icon.WALL) == Icon.WALL) return false
         if (grid[newPosition] == Icon.OPEN) return true
         if (grid[newPosition] == Icon.BOX) {
             val nextPosition = newPosition.move(direction)
@@ -352,7 +351,7 @@ data class Warehouse(
     ) {
         if (grid[newPosition] == Icon.BOX) {
             val nextPosition = newPosition.move(direction)
-            if (nextPosition !in grid || grid[nextPosition] == Icon.WALL) return
+            if (grid.getOrDefault(newPosition, Icon.WALL) == Icon.WALL) return
             moveBoxes(nextPosition, direction, grid)
             grid[newPosition] = Icon.OPEN
             grid[nextPosition] = Icon.BOX
@@ -372,7 +371,7 @@ enum class Icon(
     ;
 
     val isBox: Boolean
-        get() = this == BOX || this == BOX_L || this == BOX_R
+        get() = this == BOX_L || this == BOX_R
 
     companion object {
         fun fromChar(char: Char): Icon = entries.firstOrNull { it.value == char } ?: throw IllegalArgumentException("Unknown Icon: $char")

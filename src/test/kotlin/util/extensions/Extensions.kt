@@ -240,3 +240,10 @@ operator fun <T> List<MutableList<T>>.set(
 ) {
     this[point.y][point.x] = value
 }
+
+fun <T> List<List<T>>.getOrNull(point: Point): T? = if (point in this) this[point] else null
+
+fun <T> List<List<T>>.getOrDefault(
+    point: Point,
+    default: T,
+): T = getOrNull(point) ?: default
