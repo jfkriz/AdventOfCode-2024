@@ -129,6 +129,30 @@ enum class Direction(
     DownRight(1, 1, true),
     ;
 
+    fun rotateClockwise(includeDiagonal: Boolean = true): Direction =
+        when (this) {
+            Up -> if (includeDiagonal) UpRight else Right
+            Right -> if (includeDiagonal) DownRight else Down
+            Down -> if (includeDiagonal) DownLeft else Left
+            Left -> if (includeDiagonal) UpLeft else Up
+            UpRight -> if (includeDiagonal) Right else throw IllegalArgumentException("Cannot rotate diagonal direction")
+            DownRight -> if (includeDiagonal) Down else throw IllegalArgumentException("Cannot rotate diagonal direction")
+            DownLeft -> if (includeDiagonal) Left else throw IllegalArgumentException("Cannot rotate diagonal direction")
+            UpLeft -> if (includeDiagonal) Up else throw IllegalArgumentException("Cannot rotate diagonal direction")
+        }
+
+    fun rotateCounterClockwise(includeDiagonal: Boolean = true): Direction =
+        when (this) {
+            Up -> if (includeDiagonal) UpLeft else Left
+            Right -> if (includeDiagonal) UpRight else Up
+            Down -> if (includeDiagonal) DownRight else Right
+            Left -> if (includeDiagonal) DownLeft else Down
+            UpRight -> if (includeDiagonal) Up else throw IllegalArgumentException("Cannot rotate diagonal direction")
+            DownRight -> if (includeDiagonal) Right else throw IllegalArgumentException("Cannot rotate diagonal direction")
+            DownLeft -> if (includeDiagonal) Down else throw IllegalArgumentException("Cannot rotate diagonal direction")
+            UpLeft -> if (includeDiagonal) Left else throw IllegalArgumentException("Cannot rotate diagonal direction")
+        }
+
     companion object {
         fun fromChar(char: Char): Direction =
             when (char) {
