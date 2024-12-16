@@ -87,17 +87,17 @@ data class Maze(
         while (queue.isNotEmpty()) {
             val state = queue.poll()
 
-            if (state.cost > bestScore) break
+            if (state.score > bestScore) break
 
             if (state.loc == end) {
-                bestScore = state.cost
+                bestScore = state.score
                 bestSeats.addAll(state.visited)
                 continue
             }
 
-            if (visited.getOrDefault(Pair(state.loc, state.dir), Int.MAX_VALUE) < state.cost) continue
+            if (visited.getOrDefault(Pair(state.loc, state.dir), Int.MAX_VALUE) < state.score) continue
 
-            visited[Pair(state.loc, state.dir)] = state.cost
+            visited[Pair(state.loc, state.dir)] = state.score
 
             val nextMoves =
                 listOf(
@@ -115,9 +115,9 @@ data class Maze(
                 val seen = state.visited + loc
 
                 if (dir == state.dir) {
-                    queue.add(PathState(state.cost + 1, loc, dir, seen))
+                    queue.add(PathState(state.score + 1, loc, dir, seen))
                 } else {
-                    queue.add(PathState(state.cost + 1001, loc, dir, seen))
+                    queue.add(PathState(state.score + 1001, loc, dir, seen))
                 }
             }
         }
@@ -158,10 +158,10 @@ data class Maze(
 }
 
 data class PathState(
-    val cost: Int,
+    val score: Int,
     val loc: Point,
     val dir: Direction = Direction.Right,
     val visited: Set<Point> = emptySet(),
 ) : Comparable<PathState> {
-    override fun compareTo(other: PathState): Int = cost.compareTo(other.cost)
+    override fun compareTo(other: PathState): Int = score.compareTo(other.score)
 }
