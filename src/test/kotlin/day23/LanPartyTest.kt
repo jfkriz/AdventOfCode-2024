@@ -60,14 +60,13 @@ class Solver(
 
     fun solvePartOne(): Int {
         var count = 0
+        val seen = mutableSetOf<String>()
 
         for (c1 in graph.keys) {
-            for (c2 in graph[c1] ?: emptySet()) {
-                for (c3 in (graph[c1] ?: emptySet()).intersect((graph[c2] ?: emptySet()).toSet())) {
-                    if (c1 >= c2) continue
-                    if (c2 >= c3) continue
-
-                    if (listOf(c1, c2, c3).any { it.startsWith('t') }) {
+            for (c2 in graph[c1]!!) {
+                for (c3 in graph[c1]!!.intersect(graph[c2].orEmpty())) {
+                    val combination = listOf(c1, c2, c3).sorted().joinToString(",")
+                    if (listOf(c1, c2, c3).any { it.startsWith('t') } && seen.add(combination)) {
                         count++
                     }
                 }
